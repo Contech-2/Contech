@@ -70,11 +70,8 @@ html {
 .enabled {
     position: fixed !important;
     z-index: 2147483647 !important; /* Mantém sempre no topo */
-    top: 50% !important;            /* Mantém no meio da tela verticalmente */
-    
-    /* A mágica acontece aqui: */
-    right: auto !important;         /* Desliga o alinhamento à direita */
-    left: 10px !important;          /* Fixa na esquerda (com 10px de margem) */
+    top: 30% !important;            /* Mantém no meio da tela verticalmente */
+  
 }
 
 
@@ -291,7 +288,10 @@ header {
     padding: 2%;
     padding-top: 1%;
     border-radius: 10px 10px 0px 0px;
+
+  
 }
+
 
 .content-image {
     width: 100%;
