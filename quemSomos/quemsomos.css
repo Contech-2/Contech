@@ -62,6 +62,18 @@ html {
     scroll-behavior: smooth;
 }
 
+/* * --- POSICIONAMENTO DO VLIBRAS (LADO ESQUERDO) --- */
+.enabled {
+    position: fixed !important;
+    z-index: 2147483647 !important; /* Mantém sempre no topo */
+    top: 50% !important;            /* Mantém no meio da tela verticalmente */
+    
+    /* A mágica acontece aqui: */
+    right: auto !important;         /* Desliga o alinhamento à direita */
+    left: 10px !important;          /* Fixa na esquerda (com 10px de margem) */
+}
+
+
 .container-grid {
     width: 80vw;
     max-width: 1400px;
