@@ -726,5 +726,345 @@ footer .container-grid {
     .conteudo-banner p {
         font-size: 2.6em;
     }
+ 
+}
+
+
+#icone-tek-fechado {
+    width: 60px;
+    height: 80px;
+    position: fixed;
+    bottom: 2vh;
+    right: 2vw;
+    z-index: 2000;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+#icone-tek-fechado:hover { transform: scale(1.05); }
+#icone-mascote-tek { width: 100%; height: 100%; object-fit: contain; }
+
+#container-chatbot {
+    position: fixed;
+    bottom: 2vh;
+    right: 2vw;
+    width: 90vw;
+    max-width: 380px;
+    height: 85vh;
+    max-height: 650px;
+    background-color: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 2001;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+#container-chatbot.fechado {
+    transform: translateY(110%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+#botao-fechar {
+    position: absolute;
+    bottom: -3.5rem;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    background-color: #dc3545;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>');
+    padding: 0.8rem;
+    box-sizing: border-box;
+}
+
+#cabecalho-chatbot {
+    min-height: 60px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+#cabecalho-chatbot.modo-chat {
+    background-color: white;
+    border-bottom: 1px solid #eee;
     
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.conteudo-cabecalho {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.logo-cabecalho { width: 150px; }
+.logo-cabecalho-pequena { width: 32px; margin-right: 10px; }
+
+.titulo-cabecalho-chat {
+    font-family: "Bebas", sans-serif;
+    font-size: 1.3rem;
+    color: #000;
+    letter-spacing: 1px;
+    flex-grow: 1;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.minimizar-cabecalho {
+    cursor: pointer;
+    margin-left: auto;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    color: #555;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+.minimizar-cabecalho:hover {
+    background-color: #c0c0c0; 
+    color: #000; 
+    transform: scale(1.1); 
+}
+
+#area-conversacao {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background: linear-gradient(180deg, 
+        rgba(50, 135, 202, 0.7) 0%, 
+        #3066BE 26%, 
+        #3287CA 65%, 
+        rgba(52, 170, 216, 0.75) 100%
+    );
+    overflow: hidden;
+    position: relative;
+    padding-top: 0 !important;
+}
+
+#elementos-boasvindas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    flex-shrink: 0; 
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.mascote-grande { width: 90px; margin-bottom: 10px; }
+
+.titulo-boasvindas {
+    font-family: "Bebas", sans-serif;
+    font-size: 1.4rem;
+    color: white;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+#botao-conheca {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: white;
+    border: none;
+    padding: 0.6rem 2rem;
+    width: 14rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+#botao-conheca:hover { background-color: rgba(255, 255, 255, 0.6); }
+
+#cartao-chat-branco {
+    flex-grow: 1; 
+    background-color: white;
+    margin: 10px 1rem 1rem 1rem; 
+    border-radius: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+}
+
+#corpo-chat {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: white;
+}
+
+#prompts-categoria {
+    padding: 0.4rem 1rem;
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background-color: white;
+    scrollbar-width: none; 
+}
+#prompts-categoria::-webkit-scrollbar { display: none; } 
+
+.botao-categoria {
+    background-color: #ffffff;
+    color: #4BA3D5;
+    border: 1px solid #ffee58;
+    padding: 0.4rem 1rem;
+    margin-right: 0.5rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: "Roboto Medium", sans-serif;
+    transition: all 0.3s ease;
+}
+.botao-categoria:hover {
+    background-color: #4BA3D5; 
+    color: #ffffff; 
+    border-color: #4BA3D5; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+}
+
+#rodape-chatbot {
+    padding: 0.8rem 1rem;
+    background-color: white;
+}
+
+.container-input-botao {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 2px solid #3066BE;
+    border-radius: 2rem;
+    background-color: white;
+    padding: 0.2rem 0.5rem 0.2rem 1rem;
+}
+
+#input-usuario {
+    flex-grow: 1; 
+    border: none; 
+    outline: none; 
+    font-size: 0.95rem;
+    font-family: "Roboto Medium", sans-serif;
+    padding: 0.5rem 0; 
+    background: transparent; 
+    color: #000; 
+}
+
+#botao-enviar {
+    background-color: #3290CE;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: url('img/paper-plane-svgrepo-com-3.svg');
+    width: 36px; 
+    height: 36px;
+    padding: 8px;
+    flex-shrink: 0; 
+    margin-left: 0.5rem; 
+    transition: background-color 0.2s;
+}
+#botao-enviar:hover { background-color: #2a7ab5; }
+
+.escondido { display: none !important; }
+
+.mensagem-bot, .mensagem-usuario {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    width: 100%; 
+    background-color: transparent; 
+    padding: 0;
+}
+
+.mensagem-bot { justify-content: flex-start; }
+.icone-mensagem-bot {
+    width: 2.2rem;
+    height: 1.6rem;
+    margin-right: 0.5rem;
+
+    margin-top: 0;
+}
+.mensagem-bot span {
+    background-color: #f0f0f0; 
+    color: #000;
+    padding: 0.8rem 1rem;
+    border-radius: 1.2rem;
+    max-width: 65%;
+    line-height: 1.4;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+    font-family: "Roboto Light", sans-serif;
+    font-weight: 600;
+}
+
+.mensagem-usuario { justify-content: flex-end; }
+.icone-mensagem-usuario {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 0.5rem;
+    margin-top: 0;
+}
+.mensagem-usuario span {
+    background-color: #e0e0e0; 
+    color: #000;
+    padding: 0.8rem 1rem;
+    border-radius: 1.2rem;
+    max-width: 65%;
+    line-height: 1.4;
+    font-size: 0.9rem;
+    text-align: left; 
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    font-family: "Roboto Medium", sans-serif;
+    font-weight: 300;
+}
+
+@media (max-width: 480px) {
+    #container-chatbot {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        border: none;
+    }
+    #icone-tek-fechado { bottom: 20px; right: 20px; width: 55px; height: 75px; }
+    #botao-fechar { bottom: 20px; right: 20px; z-index: 2000; }
+    .titulo-boasvindas { font-size: 1.2rem; }
+    #cabecalho-chatbot { min-height: 60px; }
+    .titulo-cabecalho-chat { font-size: 1.2rem; }
+    #botao-conheca { width: 80%; }
+    .mensagem-bot span, .mensagem-usuario span { max-width: 80%; font-size: 0.95rem; }
+    #cartao-chat-branco { margin: 10px 0 0 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 }

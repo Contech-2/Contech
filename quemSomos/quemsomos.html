@@ -184,6 +184,54 @@
     </script>
 
 
+<div id="icone-tek-fechado">
+    <img id="icone-mascote-tek" src="img/Techo - Vetorizado 1.png" alt="Mascote Tekinho" onclick="abrirChatbot()">
+</div>
+
+<div id="container-chatbot" class="fechado">
+    <div id="botao-fechar" onclick="fecharChatbot()"></div>
+
+    <div id="cabecalho-chatbot">
+        <div id="cabecalho-estado-inicial" class="conteudo-cabecalho">
+            <img class="logo-cabecalho" src="img/sem sombra  1.svg" alt="Contech Logo">
+        </div>
+        
+        <div id="cabecalho-estado-chat" class="conteudo-cabecalho escondido">
+            <img class="logo-cabecalho-pequena" src="img/Techo - Vetorizado 1.png" alt="Icone Tekinho">
+            <span class="titulo-cabecalho-chat">PERGUNTE O QUE QUISER AO TECHO!</span>
+        </div>
+
+        <span class="minimizar-cabecalho" onclick="minimizarChatbot()">—</span>
+    </div>
+
+    <div id="area-conversacao">
+        <div id="elementos-boasvindas">
+            <img class="mascote-grande" src="img/cabeca.png" alt="Mascote Tekinho Grande">
+            <h2 class="titulo-boasvindas">Pergunte o que quiser ao Techo!</h2>
+            <button id="botao-conheca" onclick="mostrarVideo()">Conheça-o!</button>
+        </div>
+
+        <div id="cartao-chat-branco">
+            <div id="corpo-chat"></div>
+
+            <div id="prompts-categoria">
+                <span class="botao-categoria" data-prompt="O que são Tributos e Impostos?">Tributos e Impostos</span>
+                <span class="botao-categoria" data-prompt="Me explique o que é Balanço Patrimonial">Contabilidade Empresarial</span>
+                <span class="botao-categoria" data-prompt="Como interpretar o DRE?">Métricas Financeiras</span>
+                <span class="botao-categoria" data-prompt="O que é e como melhorar meu Fluxo de Caixa?">Crédito e Planejamento</span>
+                <span class="botao-categoria" data-prompt="O que é um pró-labore?">Dúvidas Gerais</span>
+            </div>
+
+            <div id="rodape-chatbot">
+                <div class="container-input-botao">
+                    <input type="text" id="input-usuario" placeholder="Digite sua mensagem...">
+                    <button id="botao-enviar"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 
 </html>
