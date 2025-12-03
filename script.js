@@ -1,8 +1,4 @@
 
-/* ============================================================ */
-/* 1. LÓGICA DO SITE (Menu, Tema, Contato)                      */
-/* ============================================================ */
-
 let menu = document.getElementById("menu");
 let iconeBarras = document.getElementById("icone-barras");
 let iconeX = document.getElementById("icone-x");
