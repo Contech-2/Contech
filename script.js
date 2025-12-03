@@ -1,63 +1,33 @@
+
 let menu = document.getElementById("menu")
 let iconeBarras = document.getElementById("icone-barras")
 let iconeX = document.getElementById("icone-x")
 
 function abreFechaMenu() {
-    // Menu fechado - tem a classe menu-fechado
-    // Menu aberto - não tem a classe menu-fechado
-
-    // Alterna a classe menu-fechado
-    // menu.classList.toggle("menu-fechado")
-
-
     if (menu.classList.contains("menu-fechado")) {
-        // Abrir o menu - remover a classe menu-fechado
         menu.classList.remove("menu-fechado")
-
-        // Esconder icone barras
         iconeBarras.style.display = "none"
-
-        // Mostrar o icone do X
         iconeX.style.display = "inline"
-
-    }
-
-    else {
-        // Fechar o menu - adicionar a classe menu-fechado
+    } else {
         menu.classList.add("menu-fechado")
-
-        // Esconder icone do X
         iconeX.style.display = "none"
-
-        // Mostrar o icone barras
         iconeBarras.style.display = "inline"
     }
 }
 
 onresize = () => {
-    // Abrir o menu - remover a classe menu-fechado
     menu.classList.remove("menu-fechado")
-
-    // Esconder icone barras
     iconeBarras.style.display = "none"
-
-    // Mostrar o icone do X
     iconeX.style.display = "inline"
 }
 
-
 function alternarTema() {
     const body = document.body;
-    
-    // Alterna a classe 'dark-mode' no body
     body.classList.toggle('dark-mode');
-    
-    // (Opcional) Salva a preferência no navegador
     const isDarkMode = body.classList.contains('dark-mode');
     localStorage.setItem('tema', isDarkMode ? 'dark' : 'light');
 }
 
-// Verifica a preferência salva ao carregar a página
 window.onload = function() {
     const temaSalvo = localStorage.getItem('tema');
     if (temaSalvo === 'dark') {
@@ -65,19 +35,12 @@ window.onload = function() {
     }
 }
 
-
-
-
 function Contatar(event) {
-    // 1. Previne o recarregamento da página
     event.preventDefault();
-
-    // 2. Feedback visual no botão
     const btn = event.target.querySelector('button');
     const textoOriginal = btn.innerText;
     btn.innerText = 'Enviando...';
 
-    // 3. Captura os dados do formulário
     const templateParams = {
         nome: document.getElementById('campo-nome').value,
         email: document.getElementById('campo-email').value,
@@ -85,20 +48,15 @@ function Contatar(event) {
         mensagem: document.getElementById('campo-texto').value
     };
 
-    // 4. IDs de configuração do EmailJS
     const serviceID = 'service_hmfbmmb';
-    const templateID = 'template_hl0mhn3'; // <--- ID Aplicado aqui
+    const templateID = 'template_hl0mhn3';
 
-    // 5. Envia o email
     emailjs.send(serviceID, templateID, templateParams)
         .then(function(response) {
             console.log('SUCESSO!', response.status, response.text);
             alert('Mensagem enviada com sucesso!');
-            
-            // Limpa o formulário e restaura o botão
             event.target.reset();
             btn.innerText = textoOriginal;
-            
         }, function(error) {
             console.log('FALHA...', error);
             alert('Ocorreu um erro ao enviar. Verifique o console para detalhes.');
@@ -120,7 +78,7 @@ const inputUsuario = document.getElementById('input-usuario');
 const botaoEnviar = document.getElementById('botao-enviar');
 const botoesCategoria = document.querySelectorAll('.botao-categoria');
 
-const URL_MASCOTE_TEKINHO = "img/cabeca.png";
+const URL_MASCOTE_TEKINHO = "img/cabeca.png"; 
 const URL_ICONE_USUARIO = "img/icone usuario.png"; 
 const URL_VIDEO = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; 
 
@@ -196,31 +154,38 @@ async function processarMensagem(texto) {
     inputUsuario.value = '';
     
     inputUsuario.disabled = true;
-    inputUsuario.placeholder = "Techo está digitando...";
-    await new Promise(r => setTimeout(r, 1500));
+    botaoEnviar.disabled = true;
+    inputUsuario.placeholder = "Techo está pensando...";
     
-    let resposta = "";
-    const textoLower = texto.toLowerCase();
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: texto })
+        });
 
-    if (textoLower.includes("tributo") || textoLower.includes("imposto")) {
-        resposta = "Ótima pergunta! **Tributos** é o gênero geral, e **Impostos** (como IR, ICMS) são uma espécie de tributo pagos ao governo.";
-    } else if (textoLower.includes("balanço")) {
-        resposta = "O **Balanço Patrimonial** é como uma **foto** 📸 da saúde financeira da sua empresa.";
-    } else if (textoLower.includes("dre")) {
-        resposta = "O **DRE** é como um **filme** 🎬 das finanças. Ele mostra se você teve **Lucro** ou **Prejuízo**.";
-    } else if (textoLower.includes("fluxo")) {
-        resposta = "O **Fluxo de Caixa** controla o dinheiro que entra e sai. Dica: tente receber à vista!";
-    } else {
-        resposta = `Entendi! Você disse: "**${texto}**". Como sou um protótipo, ainda estou aprendendo sobre isso!`;
+        if (!response.ok) {
+            throw new Error(`Erro na API: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        adicionarMensagem(data.reply, 'bot');
+
+    } catch (error) {
+        console.error("Erro detalhado:", error);
+        adicionarMensagem("Desculpe, estou com problemas de conexão agora. Tente recarregar a página! 🔌", 'bot');
+    } finally {
+        inputUsuario.disabled = false;
+        botaoEnviar.disabled = false;
+        inputUsuario.placeholder = "Digite sua mensagem...";
+        inputUsuario.focus();
     }
-    
-    adicionarMensagem(resposta, 'bot');
-    
-    inputUsuario.disabled = false;
-    inputUsuario.placeholder = "Digite sua mensagem...";
-    inputUsuario.focus();
 }
 
+// Event Listeners
 botaoEnviar.addEventListener('click', () => processarMensagem(inputUsuario.value));
 
 inputUsuario.addEventListener('keypress', (e) => {
