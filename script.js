@@ -198,3 +198,9 @@ botoesCategoria.forEach(btn => {
         processarMensagem(texto);
     });
 });
+
+botaoEnviar.addEventListener('click', () => {
+    console.log("O botão foi clicado!"); 
+    alert("Teste: O botão funciona!");  
+    processarMensagem(inputUsuario.value);
+});
