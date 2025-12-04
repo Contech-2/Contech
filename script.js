@@ -1,3 +1,6 @@
+/* ============================================================ */
+/* 1. LÓGICA DO SITE (Menu, Tema, Contato)                      */
+/* ============================================================ */
 
 let menu = document.getElementById("menu");
 let iconeBarras = document.getElementById("icone-barras");
@@ -64,6 +67,10 @@ function Contatar(event) {
         });
 }
 
+/* ============================================================ */
+/* 2. LÓGICA DO CHATBOT TEKINHO (VIA N8N)                       */
+/* ============================================================ */
+
 const iconeTekFechado = document.getElementById('icone-tek-fechado');
 const containerChatbot = document.getElementById('container-chatbot');
 const cabecalhoChatbot = document.getElementById('cabecalho-chatbot');
@@ -80,15 +87,32 @@ const botoesCategoria = document.querySelectorAll('.botao-categoria');
 
 const URL_MASCOTE_TEKINHO = "img/cabeca.png"; 
 const URL_ICONE_USUARIO = "img/icone usuario.png"; 
-const URL_VIDEO = "https://www.youtu.be/YvJZsteRjMg"; 
+const URL_VIDEO = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; 
 
+// LINK DO SEU WEBHOOK N8N (Com aspas!)
+const N8N_WEBHOOK_URL = "https://felipefalconi.app.n8n.cloud/webhook/chat";
 let chatIniciado = false;
+
+/**
+ * FUNÇÃO NOVA: Cria ou recupera o ID de sessão único do utilizador.
+ * O localStorage salva isso no navegador.
+ */
+function obterOuCriarIdSessao() {
+    let sessionId = localStorage.getItem('chatbotSessionId');
+    
+    if (!sessionId) {
+        // Gera um ID UUID único para o novo utilizador
+        // Usa uma função mais compatível para garantir que funciona em todos os browsers
+        sessionId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        localStorage.setItem('chatbotSessionId', sessionId);
+    }
+    return sessionId;
+}
 
 function abrirChatbot() {
     iconeTekFechado.style.display = 'none';
     containerChatbot.classList.remove('fechado');
 
-    // Reseta visual para o estado inicial
     chatIniciado = false;
     elementosBoasVindas.classList.remove('escondido');
     cabecalhoChatbot.classList.remove('modo-chat');
@@ -97,7 +121,6 @@ function abrirChatbot() {
 
     corpoChat.innerHTML = '';
     
-    // Mensagens de saudação (Fixas)
     adicionarMensagem("Olá, Eu sou o Techo!", 'bot');
     adicionarMensagem("O que quer saber?", 'bot');
 
@@ -111,13 +134,8 @@ function fecharChatbot() {
     }, 300);
 }
 
-function minimizarChatbot() {
-    fecharChatbot();
-}
-
-function mostrarVideo() {
-    window.open(URL_VIDEO, '_blank');
-}
+function minimizarChatbot() { fecharChatbot(); }
+function mostrarVideo() { window.open(URL_VIDEO, '_blank'); }
 
 function iniciarModoChatCompleto() {
     if (chatIniciado) return;
@@ -132,11 +150,11 @@ function iniciarModoChatCompleto() {
 function adicionarMensagem(texto, remetente) {
     const divMensagem = document.createElement('div');
     
-    // Formatação de texto (Negrito e Itálico)
+    // Formatação de texto
     let textoFormatado = texto
-        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') // Converte **texto** para Negrito
-        .replace(/\*(.*?)\*/g, '<i>$1</i>')     // Converte *texto* para Itálico
-        .replace(/\n/g, '<br>');                // Quebra de linha
+        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+        .replace(/\*(.*?)\*/g, '<i>$1</i>')
+        .replace(/\n/g, '<br>');
 
     let iconeHTML = '';
     if (remetente === 'bot') {
@@ -154,47 +172,67 @@ function adicionarMensagem(texto, remetente) {
 }
 
 /**
- * FUNÇÃO PRINCIPAL: Conecta com a API do Gemini
+ * FUNÇÃO PRINCIPAL: Conecta com o n8n
  */
 async function processarMensagem(texto) {
     if (!texto.trim()) return;
 
-    // 1. Muda visual para o chat completo
     iniciarModoChatCompleto();
 
-    // 2. Adiciona mensagem do usuário na tela
     adicionarMensagem(texto, 'user');
     inputUsuario.value = '';
     
-    // 3. Trava input e mostra estado de carregamento
     inputUsuario.disabled = true;
     botaoEnviar.disabled = true;
-    inputUsuario.placeholder = "Techo está digitando...";
+    inputUsuario.placeholder = "Techo está pensando...";
+    const textoBaixo = texto.toLowerCase();
+
+    // Verifica se falou do Corinthians ou perguntou o time
+    if (textoBaixo.includes("vai corinthians") || 
+        textoBaixo.includes("que time você torce") || 
+        textoBaixo.includes("qual seu time")) {
+        
+        // Simula um tempinho de "pensar" (1 segundo) para ficar natural
+        await new Promise(r => setTimeout(r, 1000));
+        
+        // Resposta direta do Tekinho Corintiano
+        adicionarMensagem("Aqui é **Corinthians**! Vai Timão! 🦅🖤🤍", 'bot');
+
+        inputUsuario.disabled = false;
+        botaoEnviar.disabled = false;
+        inputUsuario.placeholder = "Digite sua mensagem...";
+        inputUsuario.focus();
+        return; 
+    }
     
     try {
-        // --- CONEXÃO COM A API ---
-        const response = await fetch('/api/chat', {
+        const userSessionId = obterOuCriarIdSessao(); 
+
+        const response = await fetch(N8N_WEBHOOK_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: texto })
+            body: JSON.stringify({ 
+                message: texto,
+                sessionId: userSessionId 
+            })
         });
 
         if (!response.ok) {
-            throw new Error(`Erro na API: ${response.status}`);
+            throw new Error(`Erro no n8n: ${response.status}`);
         }
 
         const data = await response.json();
         
-        // 4. Recebe a resposta da IA e mostra na tela
-        adicionarMensagem(data.reply, 'bot');
+        const respostaBot = data.reply || data.output || data.text || "Sem resposta definida.";
+
+        adicionarMensagem(respostaBot, 'bot');
 
     } catch (error) {
         console.error("Erro detalhado:", error);
         adicionarMensagem("Desculpe, estou com problemas de conexão agora. Tente recarregar a página! 🔌", 'bot');
     } finally {
-        // 5. Destrava o chat
         inputUsuario.disabled = false;
         botaoEnviar.disabled = false;
         inputUsuario.placeholder = "Digite sua mensagem...";
@@ -202,21 +240,17 @@ async function processarMensagem(texto) {
     }
 }
 
-// --- Event Listeners ---
-
-// Botão Enviar
+// Event Listeners
 botaoEnviar.addEventListener('click', () => {
     processarMensagem(inputUsuario.value);
 });
 
-// Tecla Enter
 inputUsuario.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         processarMensagem(inputUsuario.value);
     }
 });
 
-// Botões de Categoria
 botoesCategoria.forEach(btn => {
     btn.addEventListener('click', () => {
         let texto = btn.getAttribute('data-prompt');
